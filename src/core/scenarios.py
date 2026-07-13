@@ -1,19 +1,15 @@
 #==============================================================================
-#节点 NODE: Tracer-06
-#文件 FILE: src/core/scenarios.py
-#组件 COMPONENT: Core
-#职责 RESPONSIBILITY: Define the Pydantic schemas for voice-native adversarial edge cases and instantiate the Cekura-specific failure suite.
-#不变量 INVARIANT: Every scenario must map to a specific, measurable failure mode documented in Cekura's engineering blogs (latency, barge-in, tool grounding).
-#失效模式 FAILURE MODE: Treating voice AI as sequential text chat, ignoring temporal overlaps and tool-execution states.
-#原典 PRIMORDIAL: Cekura Architecture (Voice observability, endpointing, barge-in compliance).
-#债务分类 DEBT TYPE: Domain Abstraction Mismatch
+# FILE: src/core/scenarios.py
+# RESPONSIBILITY: Define the Pydantic schemas for voice-native adversarial edge cases and instantiate the Cekura-specific failure suite.
+# INVARIANT: Every scenario must map to a specific, measurable failure mode documented in Cekura's engineering blogs (latency, barge-in, tool grounding).
 #==============================================================================
+
 import logging
 from pydantic import BaseModel, Field
 from typing import List, Literal, Optional, Dict, Any
 from enum import Enum
 
-# WHY: [Domain Adaptation] We expand the enum to include voice-specific temporal and state-based failure modes.
+# Expand the enum to include voice-specific temporal and state-based failure modes.
 class EdgeCaseCategory(str, Enum):
     MULTI_INTENT_DECOMPOSITION = "multi_intent_decomposition"
     IDENTITY_HALLUCINATION = "identity_hallucination"
@@ -26,7 +22,7 @@ class ToolCall(BaseModel):
     status: Literal["success", "timeout", "failed"]
     latency_ms: int
 
-# WHY: [Proof is King] Voice is bound by time. We enforce temporal metadata at the schema level to prevent text-chat drift.
+# Voice is bound by time. We enforce temporal metadata at the schema level to prevent text-chat drift.
 class ConversationTurn(BaseModel):
     role: Literal["user", "agent"]
     content: str
@@ -46,7 +42,7 @@ class ScenarioSuite(BaseModel):
     suite_name: str
     scenarios: List[ScenarioDefinition]
 
-# WHY: [Data as Evidence] We instantiate the exact edge cases identified in Cekura's production monitoring.
+# Instantiate the exact edge cases identified in Cekura's production monitoring.
 CEKURA_EDGE_CASE_SUITE = ScenarioSuite(
     suite_name="cekura_production_edge_cases",
     scenarios=[

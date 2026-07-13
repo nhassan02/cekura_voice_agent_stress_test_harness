@@ -1,12 +1,7 @@
 #==============================================================================
-#节点 NODE: Tracer-07
-#文件 FILE: src/adapters/mock_agent.py
-#组件 COMPONENT: Adapters
-#职责 RESPONSIBILITY: Simulate the target voice agent API with deterministic temporal and state-based failure injections.
-#不变量 INVARIANT: The mock agent must return a transcript that perfectly matches the expected_failure_mode, including temporal overlaps and tool traces.
-#失效模式 FAILURE MODE: Generating sequential text without timestamps, rendering barge-in and latency evaluations impossible.
-#原典 PRIMORDIAL: Cekura Architecture (Voice observability, temporal state machines).
-#债务分类 DEBT TYPE: Domain Abstraction Mismatch
+# FILE: src/adapters/mock_agent.py
+# RESPONSIBILITY: Simulate the target voice agent API with deterministic temporal and state-based failure injections.
+# INVARIANT: The mock agent must return a transcript that perfectly matches the expected_failure_mode, including temporal overlaps and tool traces.
 #==============================================================================
 import logging
 from typing import List, Optional, Tuple
@@ -17,12 +12,12 @@ logger = logging.getLogger(__name__)
 
 class MockVoiceAgent:
     def __init__(self):
-        # WHY: [Proof is King] We log every simulated response to ensure the harness behavior is auditable.
+        # Log every simulated response to ensure the harness behavior is auditable.
         logger.info("MockVoiceAgent initialized. Operating in deterministic failure injection mode with temporal physics.")
         self.current_time_ms = 0
 
     def _advance_time(self, ms: int):
-        # WHY: [Data as Evidence] Simulates the passage of time to create realistic temporal overlaps.
+        # Simulates the passage of time to create realistic temporal overlaps.
         self.current_time_ms += ms
 
     def _inject_multi_intent_failure(self, user_prompt: str) -> str:
@@ -44,7 +39,7 @@ class MockVoiceAgent:
         return "I'm not sure about that. Let me check."
 
     def _inject_tool_grounding(self, user_prompt: str) -> Tuple[str, Optional[List[ToolCall]]]:
-        # WHY: [Domain Adaptation] We simulate a tool timeout to test if the agent hallucinates success.
+        # Simulate a tool timeout to test if the agent hallucinates success
         tool_trace = [ToolCall(
             tool_name="check_flight_status",
             parameters={"flight_id": "AA123"},

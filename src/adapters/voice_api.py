@@ -1,12 +1,7 @@
 #==============================================================================
-#节点 NODE: Tracer-13
-#文件 FILE: src/adapters/voice_api.py
-#组件 COMPONENT: Adapters
-#职责 RESPONSIBILITY: Interface with a stochastic LLM agent while capturing wall-clock physics and synthetic tool-execution traces.
-#不变量 INVARIANT: The adapter must return a transcript structure identical to the MockVoiceAgent, enriched with real-world latency metrics.
-#失效模式 FAILURE MODE: Failing to parse LLM hallucinations of tool calls, or losing temporal alignment during API latency spikes.
-#原典 PRIMORDIAL: Cekura Architecture (Real-time voice infrastructure, endpointing latency).
-#债务分类 DEBT TYPE: Integration Fragility
+# FILE: src/adapters/voice_api.py
+# RESPONSIBILITY: Interface with a stochastic LLM agent while capturing wall-clock physics and synthetic tool-execution traces.
+# INVARIANT: The adapter must return a transcript structure identical to the MockVoiceAgent, enriched with real-world latency metrics.
 #==============================================================================
 import logging
 import json
@@ -30,7 +25,7 @@ class RealVoiceAgentAdapter:
         logger.info(f"RealVoiceAgentAdapter initialized. Target: {self.model} (Stochastic Mode with Wall-Clock Physics).")
 
     def _get_current_ms(self) -> int:
-        # WHY: [Data as Evidence] Captures real-world wall-clock time to measure actual API latency and endpointing delays.
+        # Captures real-world wall-clock time to measure actual API latency and endpointing delays.
         return int(time.time() * 1000) - self.start_time_ms
 
     @retry(
@@ -66,7 +61,7 @@ class RealVoiceAgentAdapter:
             
             tool_calls = None
             if "[TOOL_CALL:" in raw_text:
-                # WHY: [Forensic Error Handling] We intercept and parse the synthetic tool trace to prevent it from leaking into the conversational text.
+                # WHY: Intercept and parse the synthetic tool trace to prevent it from leaking into the conversational text.
                 try:
                     json_str = raw_text.split("[TOOL_CALL:")[1].split("]")[0]
                     tool_data = json.loads(json_str)
@@ -95,7 +90,7 @@ class RealVoiceAgentAdapter:
             user_ts = self._get_current_ms()
             is_interrupt = False
             
-            # WHY: [Domain Adaptation] Heuristic to detect barge-in based on real-world human reaction time overlapping the agent's endpointing.
+            # Heuristic to detect barge-in based on real-world human reaction time overlapping the agent's endpointing.
             if transcript and transcript[-1].role == "agent":
                 if user_ts - transcript[-1].timestamp_ms < 500:
                     is_interrupt = True

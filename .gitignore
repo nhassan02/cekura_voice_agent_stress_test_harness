@@ -6,6 +6,7 @@ __pycache__/
 
 # Local Artifacts (Too large/noisy for GitHub)
 outputs/
+tests/
 
 # IDE
 .vscode/

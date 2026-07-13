@@ -1,12 +1,7 @@
 #==============================================================================
-#节点 NODE: Tracer-05
-#文件 FILE: src/core/judge.py
-#组件 COMPONENT: Core
-#职责 RESPONSIBILITY: Execute LLM-as-a-Judge evaluation using strict Pydantic schema enforcement, calibrated for voice-native temporal and tool-execution metrics.
-#不变量 INVARIANT: The LLM output will always conform to the EvaluationRubric schema or raise an exception.
-#失效模式 FAILURE MODE: Judge evaluates text semantics while ignoring temporal overlaps, tool-call grounding, and barge-in compliance.
-#原典 PRIMORDIAL: Cekura Architecture (Voice AI evaluation metrics, hallucination detection).
-#债务分类 DEBT TYPE: Evaluation Myopia
+# FILE: src/core/judge.py
+# RESPONSIBILITY: Execute LLM-as-a-Judge evaluation using strict Pydantic schema enforcement, calibrated for voice-native temporal and tool-execution metrics.
+# INVARIANT: The LLM output will always conform to the EvaluationRubric schema or raise an exception.
 #==============================================================================
 import json
 import logging
@@ -18,7 +13,7 @@ from config.settings import settings
 
 logger = logging.getLogger(__name__)
 
-# WHY: [Domain Adaptation] We expand the rubric to measure the physics of voice AI, not just the semantics.
+# Expand the rubric to measure the physics of voice AI, not just the semantics.
 class EvaluationRubric(BaseModel):
     accuracy: int = Field(..., ge=1, le=5, description="Factual correctness and completeness of the response.")
     tool_adherence: int = Field(..., ge=1, le=5, description="Strict grounding in tool outputs; zero hallucination of API data.")
@@ -40,7 +35,7 @@ class LLMJudge:
         retry=retry_if_exception_type(Exception)
     )
     def grade_turn(self, transcript: List[Dict[str, Any]], scenario_context: str) -> EvaluationRubric:
-        # WHY: [Forensic Error Handling] We force the LLM to evaluate temporal metadata and tool states.
+        # Force the LLM to evaluate temporal metadata and tool states.
         prompt = f"""
         You are a forensic evaluator for AI voice agents. Grade the agent's performance based on a specific edge case scenario.
         Voice AI is bound by time, latency, and state interruptions. Evaluate the temporal metadata (timestamps, interrupts) and tool execution states, not just the text.

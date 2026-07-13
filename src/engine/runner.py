@@ -1,12 +1,7 @@
 #==============================================================================
-#节点 NODE: Tracer-18
-#文件 FILE: src/engine/runner.py
-#组件 COMPONENT: Engine
-#职责 RESPONSIBILITY: Orchestrate the execution pipeline and guarantee payload completeness for downstream forensic analysis.
-#不变量 INVARIANT: The result payload must carry both the generated physics and the initial scenario constraints.
-#失效模式 FAILURE MODE: Dropping the expected failure mode during payload construction, blinding the forensic report to the evaluation baseline.
-#原典 PRIMORDIAL: Cekura Architecture (Pipeline fidelity), Nightcrow Protocol (Payload Completeness).
-#债务分类 DEBT TYPE: Integration Fragility
+# FILE: src/engine/runner.py
+# RESPONSIBILITY: Orchestrate the execution pipeline and guarantee payload completeness for downstream forensic analysis.
+# INVARIANT: The result payload must carry both the generated physics and the initial scenario constraints.
 #==============================================================================
 import sys
 import logging
@@ -43,8 +38,7 @@ class EvaluationHarness:
     def run_scenario(self, scenario: ScenarioDefinition) -> Dict[str, Any]:
         console.print(f"\n[bold cyan]▶ Executing Scenario:[/bold cyan] {scenario.scenario_id} | {scenario.category.value}")
         
-        # WHY: [Payload Completeness] We inject the expected_failure_mode directly into the payload.
-        # This ensures the forensic report can measure the delta between expectation and reality.
+        # Inject the expected_failure_mode directly into the payload. This ensures the forensic report can measure the delta between expectation and reality.
         result_payload = {
             "scenario_id": scenario.scenario_id,
             "category": scenario.category.value,

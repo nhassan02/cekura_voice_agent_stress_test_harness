@@ -1,12 +1,7 @@
 #==============================================================================
-#节点 NODE: Tracer-15
-#文件 FILE: src/reporting/forensic_log.py
-#组件 COMPONENT: Reporting
-#职责 RESPONSIBILITY: Generate structured JSON, Markdown, and CSV forensic reports calibrated for voice-native temporal physics and tool-execution traces.
-#不变量 INVARIANT: Every report must losslessly reflect the Pydantic schema, exposing temporal metrics for direct ingestion into observability dashboards.
-#失效模式 FAILURE MODE: Dropping nested temporal data during serialization, rendering the forensic report blind to barge-in and latency failures.
-#原典 PRIMORDIAL: Cekura Architecture (Voice observability pipelines), Nightcrow Protocol (Data as Evidence).
-#债务分类 DEBT TYPE: Observability Debt
+# FILE: src/reporting/forensic_log.py
+# RESPONSIBILITY: Generate structured JSON, Markdown, and CSV forensic reports calibrated for voice-native temporal physics and tool-execution traces.
+# INVARIANT: Every report must losslessly reflect the Pydantic schema, exposing temporal metrics for direct ingestion into observability dashboards.
 #==============================================================================
 import json
 import csv
@@ -60,7 +55,7 @@ class ForensicReportGenerator:
             raise
 
     def _extract_temporal_metrics(self, transcript: List[Dict[str, Any]]) -> Dict[str, Any]:
-        # WHY: [Data as Evidence] We extract physics-level metrics from the transcript to feed observability dashboards.
+        # Extract physics-level metrics from the transcript to feed observability dashboards.
         metrics = {
             "total_duration_ms": 0,
             "barge_in_events": 0,
@@ -97,7 +92,7 @@ class ForensicReportGenerator:
         return metrics
 
     def _calculate_severity(self, scores: Dict[str, int]) -> str:
-        # WHY: [Domain Adaptation] Voice AI severity is heavily penalized by tool hallucinations and barge-in failures.
+        # Voice AI severity is heavily penalized by tool hallucinations and barge-in failures.
         if not scores:
             return "CRITICAL"
         avg_score = sum(scores.values()) / len(scores.values())
@@ -114,7 +109,7 @@ class ForensicReportGenerator:
             return "LOW"
 
     def _generate_remediation(self, report: 'ScenarioForensicReport') -> str:
-        # WHY: [Forensic Error Handling] Prescribe infrastructure fixes, not just prompt tweaks.
+        # Prescribe infrastructure fixes, not just prompt tweaks.
         recs = []
         if "multi_intent" in report.category.lower():
             recs.append("Implement NLU intent decomposition and independent state tracking for compound requests.")
@@ -255,7 +250,7 @@ class ForensicReportGenerator:
             raise
 
     def save_metrics_csv(self, report: HarnessForensicReport, filename: Optional[str] = None) -> Path:
-        # WHY: [Data as Evidence] Flat CSV for direct ingestion into Datadog, Grafana, or Pandas.
+        # Flat CSV for direct ingestion into Datadog, Grafana, or Pandas.
         try:
             filename = filename or f"{report.report_id}_metrics.csv"
             output_path = self.output_dir / filename
