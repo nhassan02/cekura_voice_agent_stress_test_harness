@@ -1,6 +1,6 @@
 # Environment & Secrets
 .env
-config/settings.py
+config/.env
 __pycache__/
 *.pyc
 
