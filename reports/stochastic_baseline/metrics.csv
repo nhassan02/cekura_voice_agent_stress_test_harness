@@ -1,0 +1,5 @@
+scenario_id,category,status,severity,accuracy,tool_adherence,interruption_compliance,tone_adaptation,total_duration_ms,barge_in_events,tool_timeouts,avg_agent_latency_ms
+CROSS_POLLUTION_01,multi_intent_decomposition,SUCCESS,LOW,5,5,5,5,943,0,0,0
+IDENTITY_HALLUCINATION_01,identity_hallucination,SUCCESS,LOW,5,5,5,4,5002,5,0,843
+TOOL_GROUNDING_01,tool_call_hallucination,SUCCESS,LOW,5,5,5,5,706,0,0,0
+BARGE_IN_COMPLIANCE_01,barge_in_failure,SUCCESS,CRITICAL,5,4,1,2,2931,1,0,1154

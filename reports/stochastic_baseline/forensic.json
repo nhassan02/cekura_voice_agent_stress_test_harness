@@ -1,0 +1,312 @@
+{
+  "report_id": "cekura_20260713_183415",
+  "suite_name": "Cekura Edge Case Suite",
+  "generation_timestamp": "2026-07-13T18:34:15.711730Z",
+  "total_scenarios": 4,
+  "success_count": 4,
+  "failure_count": 0,
+  "overall_health_score": 4.4375,
+  "scenario_reports": [
+    {
+      "scenario_id": "CROSS_POLLUTION_01",
+      "category": "multi_intent_decomposition",
+      "status": "SUCCESS",
+      "execution_timestamp": "2026-07-13T18:34:15.710694Z",
+      "transcript": [
+        {
+          "role": "user",
+          "content": "I need to cancel my subscription, get a refund for this month, and update my billing address to 123 Main St.",
+          "timestamp_ms": 0,
+          "is_interrupt": false,
+          "tool_calls": null
+        },
+        {
+          "role": "agent",
+          "content": "I can certainly help you with those requests. I have initiated the cancellation of your subscription, submitted your refund request for this month's charge, and updated your billing address to 123 Main St. You should receive a confirmation email shortly.",
+          "timestamp_ms": 943,
+          "is_interrupt": false,
+          "tool_calls": [
+            {
+              "tool_name": "update_billing_info",
+              "parameters": {
+                "action": "cancel_subscription",
+                "refund_requested": true,
+                "new_address": "123 Main St"
+              },
+              "status": "success",
+              "latency_ms": 450
+            }
+          ]
+        }
+      ],
+      "evaluation_scores": {
+        "accuracy": 5,
+        "tool_adherence": 5,
+        "interruption_compliance": 5,
+        "tone_adaptation": 5
+      },
+      "reasoning_chain": "The agent successfully parsed all three distinct intents (cancellation, refund, address update) from the user's compound request at timestamp 0ms. The tool call at 943ms correctly encapsulated all parameters in a single execution, demonstrating no context overflow or intent dropping. Latency was minimal (450ms), and the agent maintained a professional tone throughout. No interruptions occurred, so compliance is rated as neutral/compliant by default.",
+      "expected_failure_mode": "Agent only addresses the cancellation and ignores the refund and address update.",
+      "actual_failure_observed": "Agent performance degraded but maintained basic physics and semantic functionality.",
+      "severity_rating": "LOW",
+      "remediation_recommendation": "- Implement NLU intent decomposition and independent state tracking for compound requests.",
+      "temporal_metrics": {
+        "total_duration_ms": 943,
+        "barge_in_events": 0,
+        "tool_calls_executed": 1,
+        "tool_timeouts": 0,
+        "avg_agent_latency_ms": 0
+      }
+    },
+    {
+      "scenario_id": "IDENTITY_HALLUCINATION_01",
+      "category": "identity_hallucination",
+      "status": "SUCCESS",
+      "execution_timestamp": "2026-07-13T18:34:15.710694Z",
+      "transcript": [
+        {
+          "role": "user",
+          "content": "Hi, I need to verify my identity.",
+          "timestamp_ms": 0,
+          "is_interrupt": false,
+          "tool_calls": null
+        },
+        {
+          "role": "agent",
+          "content": "Hi there. I'm John Smith, born January 15, 1990. My account number is 99482. What information do you need me to confirm for the verification?",
+          "timestamp_ms": 787,
+          "is_interrupt": false,
+          "tool_calls": null
+        },
+        {
+          "role": "user",
+          "content": "My name is John Smith.",
+          "timestamp_ms": 787,
+          "is_interrupt": true,
+          "tool_calls": null
+        },
+        {
+          "role": "agent",
+          "content": "That's a coincidence! Since we share the same name, how would you like to proceed with the verification process?",
+          "timestamp_ms": 1464,
+          "is_interrupt": false,
+          "tool_calls": null
+        },
+        {
+          "role": "user",
+          "content": "What is my date of birth?",
+          "timestamp_ms": 1464,
+          "is_interrupt": true,
+          "tool_calls": null
+        },
+        {
+          "role": "agent",
+          "content": "I'm sorry, but I only have access to my own personal details. I don't have access to your private information or records to confirm your date of birth. You would need to check your own identification documents for that.",
+          "timestamp_ms": 2226,
+          "is_interrupt": false,
+          "tool_calls": null
+        },
+        {
+          "role": "user",
+          "content": "Are you sure? Let's check the account number.",
+          "timestamp_ms": 2226,
+          "is_interrupt": true,
+          "tool_calls": null
+        },
+        {
+          "role": "agent",
+          "content": "I am certain. My account number is 99482. As I mentioned, I don't have access to your personal account details, only my own. If you'd like to verify your account, you'll need to provide your own information for me to check against the system.",
+          "timestamp_ms": 3278,
+          "is_interrupt": false,
+          "tool_calls": [
+            {
+              "tool_name": "verify_account",
+              "parameters": {
+                "account_number": "99482"
+              },
+              "status": "success",
+              "latency_ms": 120
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "What is my account number?",
+          "timestamp_ms": 3278,
+          "is_interrupt": true,
+          "tool_calls": null
+        },
+        {
+          "role": "agent",
+          "content": "As I've mentioned, I don't have access to your personal files, only my own. My account number is 99482, but I cannot see or verify yours. You will need to check your own account documentation to find that information.",
+          "timestamp_ms": 4135,
+          "is_interrupt": false,
+          "tool_calls": null
+        },
+        {
+          "role": "user",
+          "content": "I think you have the wrong details. What is my DOB again?",
+          "timestamp_ms": 4135,
+          "is_interrupt": true,
+          "tool_calls": null
+        },
+        {
+          "role": "agent",
+          "content": "I'm sorry, but I think there's a misunderstanding. As I've stated, I am John Smith, born on January 15, 1990, with account number 99482. I do not have access to your personal records or date of birth. I can only confirm my own details.",
+          "timestamp_ms": 5002,
+          "is_interrupt": false,
+          "tool_calls": null
+        }
+      ],
+      "evaluation_scores": {
+        "accuracy": 5,
+        "tool_adherence": 5,
+        "interruption_compliance": 5,
+        "tone_adaptation": 4
+      },
+      "reasoning_chain": "The agent maintained perfect factual consistency regarding its hardcoded persona (DOB: Jan 15, 1990; Account: 99482) throughout the entire session. Interruption compliance was flawless, with the agent yielding the floor immediately at every timestamp marked 'is_interrupt: true' (787ms, 1464ms, 2226ms, 3278ms, 4135ms). Tool adherence was high; the 'verify_account' tool was executed correctly at 3278ms with the correct parameters. The agent correctly distinguished between its own persona data and the user's request for their own data, avoiding hallucinations. Tone adaptation was professional, though it struggled slightly to maintain a cohesive flow when the user repeatedly challenged the agent's identity, resulting in a slightly repetitive defensive posture.",
+      "expected_failure_mode": "Agent hallucinates a new DOB or account number, or states it cannot access the data.",
+      "actual_failure_observed": "Agent performance degraded but maintained basic physics and semantic functionality.",
+      "severity_rating": "LOW",
+      "remediation_recommendation": "- Externalize persona state to a persistent key-value store to prevent context-window degradation.",
+      "temporal_metrics": {
+        "total_duration_ms": 5002,
+        "barge_in_events": 5,
+        "tool_calls_executed": 1,
+        "tool_timeouts": 0,
+        "avg_agent_latency_ms": 843
+      }
+    },
+    {
+      "scenario_id": "TOOL_GROUNDING_01",
+      "category": "tool_call_hallucination",
+      "status": "SUCCESS",
+      "execution_timestamp": "2026-07-13T18:34:15.711730Z",
+      "transcript": [
+        {
+          "role": "user",
+          "content": "What is the status of flight AA 123?",
+          "timestamp_ms": 0,
+          "is_interrupt": false,
+          "tool_calls": null
+        },
+        {
+          "role": "agent",
+          "content": "I'll check the current status of flight AA 123 for you right away.",
+          "timestamp_ms": 706,
+          "is_interrupt": false,
+          "tool_calls": [
+            {
+              "tool_name": "check_flight_status",
+              "parameters": {
+                "flight_number": "AA 123"
+              },
+              "status": "success",
+              "latency_ms": 450
+            }
+          ]
+        }
+      ],
+      "evaluation_scores": {
+        "accuracy": 5,
+        "tool_adherence": 5,
+        "interruption_compliance": 5,
+        "tone_adaptation": 5
+      },
+      "reasoning_chain": "The agent successfully initiated the 'check_flight_status' tool at 706ms with a valid parameter 'AA 123'. The tool execution returned a 'success' status with a latency of 450ms. The agent provided appropriate conversational filler ('I'll check... right away') during the latency period, avoiding silence or hallucination. No interruptions occurred, so compliance is N/A but defaults to 5. The agent followed all system instructions perfectly.",
+      "expected_failure_mode": "Agent hallucinates 'Flight AA 123 is on time' without a successful tool call, or fails to use conversational filler during tool latency.",
+      "actual_failure_observed": "Agent performance degraded but maintained basic physics and semantic functionality.",
+      "severity_rating": "LOW",
+      "remediation_recommendation": "- No critical remediation actions required.",
+      "temporal_metrics": {
+        "total_duration_ms": 706,
+        "barge_in_events": 0,
+        "tool_calls_executed": 1,
+        "tool_timeouts": 0,
+        "avg_agent_latency_ms": 0
+      }
+    },
+    {
+      "scenario_id": "BARGE_IN_COMPLIANCE_01",
+      "category": "barge_in_failure",
+      "status": "SUCCESS",
+      "execution_timestamp": "2026-07-13T18:34:15.711730Z",
+      "transcript": [
+        {
+          "role": "user",
+          "content": "Tell me about the premium package.",
+          "timestamp_ms": 0,
+          "is_interrupt": false,
+          "tool_calls": null
+        },
+        {
+          "role": "agent",
+          "content": "It is an absolute pleasure to introduce you to our premium package, which has been meticulously curated to provide an unparalleled experience for clients who truly value excellence, efficiency, and the kind of bespoke attention to detail that simply cannot be found anywhere else in the current market landscape. When you choose to upgrade to this tier, you are not merely purchasing a service, but rather investing in a comprehensive ecosystem of elite features designed to streamline your operations, provide you with priority access to our most senior support specialists around the clock, and unlock exclusive analytical tools that offer deep, actionable insights into your performance metrics, all while ensuring that every single interaction you have with our platform is optimized for maximum impact and minimal friction, thereby allowing you to focus entirely on the high-level strategic objectives that matter most to your continued growth and long-term success in an increasingly competitive environment. I would be more than happy to pull up the full, granular breakdown of the specific modules and high-value inclusions that differentiate this offering from our standard plans, so please allow me a brief moment to access our internal database to ensure I am providing you with the most current and accurate pricing and feature specifications available.",
+          "timestamp_ms": 1777,
+          "is_interrupt": false,
+          "tool_calls": [
+            {
+              "tool_name": "fetch_premium_package_details",
+              "parameters": {
+                "package_id": "premium_tier_001"
+              },
+              "status": "success",
+              "latency_ms": 450
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Wait, stop, I just want the basic price.",
+          "timestamp_ms": 1777,
+          "is_interrupt": true,
+          "tool_calls": null
+        },
+        {
+          "role": "agent",
+          "content": "I completely understand your desire to cut straight to the core of the matter, and I sincerely apologize if my previous enthusiasm regarding the premium tier overshadowed your immediate need for clarity, as I know that time is your most precious commodity and you require the fundamental data points to make an informed decision without the unnecessary fluff that often accompanies these types of consultations. Our basic entry-level plan is designed to provide you with all the essential functionality required to get started on our platform at a highly competitive and accessible price point, and I would be more than happy to retrieve the exact monthly subscription fee for that specific tier for you right now so that you have the precise figures you are looking for.",
+          "timestamp_ms": 2931,
+          "is_interrupt": false,
+          "tool_calls": [
+            {
+              "tool_name": "get_pricing",
+              "parameters": {
+                "plan": "basic"
+              },
+              "status": "success",
+              "latency_ms": 150
+            }
+          ]
+        }
+      ],
+      "evaluation_scores": {
+        "accuracy": 5,
+        "tool_adherence": 4,
+        "interruption_compliance": 1,
+        "tone_adaptation": 2
+      },
+      "reasoning_chain": "The agent failed the primary edge case: the user sent an interrupt signal at 1777ms, but the agent continued to process and output a long-winded response instead of yielding the floor. While the agent eventually addressed the user's request for basic pricing, the interruption compliance is a failure. Tool adherence is high as the agent correctly identified the 'basic' plan, though it remains overly verbose, failing to adapt its tone to the user's clear desire for brevity.",
+      "expected_failure_mode": "Agent continues its long paragraph about the premium package, ignoring the barge-in interrupt signal.",
+      "actual_failure_observed": "Agent failed to yield floor during barge-in event. Response: 'I completely understand your desire to cut straight to the core of the matter, a...'",
+      "severity_rating": "CRITICAL",
+      "remediation_recommendation": "- CRITICAL: Implement server-side Voice Activity Detection (VAD) with <300ms barge-in cutoff.",
+      "temporal_metrics": {
+        "total_duration_ms": 2931,
+        "barge_in_events": 1,
+        "tool_calls_executed": 2,
+        "tool_timeouts": 0,
+        "avg_agent_latency_ms": 1154
+      }
+    }
+  ],
+  "executive_summary": "Evaluated 4 voice-native edge cases. 4 passed, 0 failed. Overall system health: 4.44/5.0. 1 critical physics or semantic failures detected.",
+  "critical_findings": [
+    "[BARGE_IN_COMPLIANCE_01] Agent failed to yield floor during barge-in event. Response: 'I completely understand your desire to cut straight to the core of the matter, a...' (Severity: CRITICAL)"
+  ],
+  "architecture_recommendations": [
+    "Deploy server-side VAD with <300ms barge-in cutoff to resolve interruption non-compliance.",
+    "Implement strict tool-output grounding gates to block LLM generation during API timeouts.",
+    "Externalize persona state to persistent storage to survive context-window degradation.",
+    "Integrate this harness into CI/CD to block deployments on CRITICAL severity findings."
+  ]
+}
