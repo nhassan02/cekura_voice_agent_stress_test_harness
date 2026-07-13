@@ -1,0 +1,12 @@
+# Environment & Secrets
+.env
+config/settings.py
+__pycache__/
+*.pyc
+
+# Local Artifacts (Too large/noisy for GitHub)
+outputs/
+
+# IDE
+.vscode/
+.idea/
